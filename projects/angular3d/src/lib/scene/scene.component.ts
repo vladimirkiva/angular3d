@@ -27,25 +27,32 @@ export class SceneComponent implements OnInit {
       result += 'fill="' + polygon.fill + '" ';
     }
     if (polygon.stroke) {
-      result += 'stroke="' + polygon.stroke + '" ';
+      result += 'stroke="' + polygon.stroke + '" stroke-linejoin="round" ';
+    }
+    if (polygon.strokeWidth) {
+      result += 'stroke-width="' + polygon.strokeWidth + '" ';
+    }
+    if (polygon.id) {
+      result += 'id="' + polygon.id + '"';
     }
     return result + '/>';
   }
 
+  // TODO sin and cos to be passed as argument so as not to calculate it multiple times
   private static rotatePointOverX(a: number, p: Point, c: Point): void {
     const y = p.y - c.y;
     const z = p.z - c.z;
-    const dSin = Math.sin (a);
-    const dCos = Math.cos (a);
+    const dSin = Math.sin(a);
+    const dCos = Math.cos(a);
     p.y = c.y + dCos * y + dSin * z;
     p.z = c.z - dSin * y + dCos * z;
   }
 
-  private static rotatePointOverY(a: number, p: Point, c: Point): void {
+  public static rotatePointOverY(a: number, p: Point, c: Point): void {
     const z = p.z - c.z;
     const x = p.x - c.x;
-    const dSin = Math.sin (a);
-    const dCos = Math.cos (a);
+    const dSin = Math.sin(a);
+    const dCos = Math.cos(a);
     p.z = c.z + dCos * z + dSin * x;
     p.x = c.x - dSin * z + dCos * x;
   }
@@ -53,8 +60,8 @@ export class SceneComponent implements OnInit {
   private static rotatePointOverZ(a: number, p: Point, c: Point): void {
     const x = p.x - c.x;
     const y = p.y - c.y;
-    const dSin = Math.sin (a);
-    const dCos = Math.cos (a);
+    const dSin = Math.sin(a);
+    const dCos = Math.cos(a);
     p.x = c.x + dCos * x + dSin * y;
     p.y = c.y - dSin * x + dCos * y;
   }
@@ -66,7 +73,7 @@ export class SceneComponent implements OnInit {
     this.sceneParameters = sceneParameters;
     if (this.svgElement && this.sceneParameters?.viewBox) {
       const v = this.sceneParameters.viewBox;
-      this.svgElement.nativeElement.setAttribute('viewBox', `${v.minX} ${v.minY} ${v.maxX} ${v.maxY}`);
+      this.svgElement.nativeElement.setAttribute('viewBox', `${v.minX} ${v.minY} ${v.width} ${v.height}`);
     }
 }
 
@@ -75,7 +82,7 @@ export class SceneComponent implements OnInit {
     if (this.svgElement && this.sceneParameters?.polygons) {
       this.svgElement.nativeElement.innerHTML = this.sceneParameters.polygons.map(
         p => SceneComponent.getSvgPolygon(p)
-      ).join();
+      ).join(' ');
     }
   }
 

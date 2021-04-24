@@ -16,6 +16,10 @@ export class Angular3dComponent implements OnInit {
   @ViewChild('scene')
   private scene?: SceneComponent;
 
+  public set sceneParameters(s: SceneParameters) {
+    this.scene?.setParameters(s);
+  }
+
   constructor(private http: HttpClient) {
   }
 
@@ -38,7 +42,7 @@ export class Angular3dComponent implements OnInit {
     return true;
   }
 
-  private show(): void {
+  public show(): void {
     this.scene?.draw();
   }
 
